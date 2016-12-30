@@ -1,0 +1,49 @@
+<div class="posts container-fluid" style="width:85%; background-color:#eee; padding-bottom: 10px;margin-bottom:15px">
+	{% for post in posts %}
+	<div style="margin-bottom: 5px; margin-top: 5px; padding-bottom: 5px; padding-top: 5px">
+        <div class="raw post">
+            <div class="left-post col-md-3">
+                <div class="profile-thumbnail">
+
+                </div>
+                <div class="post-author text-center">
+			        <a href="{{ url_for('.user', username=post.author.username) }}">
+				        <span class="glyphicon glyphicon-user"></span>{{ post.author.username }}
+			        </a>
+		        </div>
+            </div>
+            <div class="right-post col-md-9" style="background-color: #ddd; margin-top:5px; padding-bottom:5px">
+                <div class="post-body">
+                    {% if post.body_html %}
+                        {{ post.body_html | safe }}
+                    {% else %}
+			            {{ post.body }}
+                    {% endif %}
+		        </div>
+                <div class="post-date col-md-6">
+			        <small>发表于{{ moment(post.timestamp).fromNow() }}</small>
+		        </div>
+                <div class="post-footer text-right col-md-6">
+                    {% if current_user == post.author %}
+                        <a href="{{ url_for('.edit', id=post.id) }}">
+                            <span class="label label-primary">编辑</span>
+                        </a>
+                    {% elif current_user.is_administrator() %}
+                        <a href="{{ url_for('.edit', id=post.id) }}">
+                            <span class="label label-danger">管理员修改</span>
+                        </a>
+                    {% endif %}
+                        <a href="{{ url_for('.post', id=post.id) }}">
+                            <span class="label label-default">查看详情</span>
+                        </a>
+                        <a href="{{ url_for('.post', id=post.id) }}#comments">
+                            <span class="label label-primary">
+                                {{ post.comments.count() }}条评论
+                            </span>
+                        </a>
+                </div>
+            </div>
+        </div>
+	</div>
+	{% endfor %}
+</div>

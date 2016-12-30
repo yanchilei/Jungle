@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ user.username }}</h1>
+    {% if user.name or user.location %}
+    <p>
+        {% if user.name %}{{ user.name }}{% endif %}
+        {% if user.location %}
+        来自{{ user.location }}. {% endif %}
+    </p>
+    {% endif %}
+
+    {% if user.about_me %}
+    <p>{{ user.about_me }}</p>
+    {% endif %}
+
+    <p>
+        注册于{{ moment(user.member_since).format('L') }}。<br>
+        上次登录是在{{ moment(user.last_seen).fromNow() }}。
+    </p>
+
+    {% if user == current_user %}
+    <a class="btn btn-primary" href="{{ url_for('.edit_profile') }}">
+        编辑资料
+    </a>
+    {% endif %}
+
+    <!-- Follow -->
+    {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+        {% if not current_user.is_following(user) %}
+        <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">
+            Follow
+        </a>
+        {% else %}
+        <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">
+            Unfollow
+        </a>
+        {% endif %}
+    {% endif %}
+    <a href="{{ url_for('.followers', username=user.username) }}">
+        Followers: <span class="badge">{{ user.fans.count() - 1 }}</span>
+    </a>
+    <a href="{{ url_for('.followed_by', username=user.username) }}">
+        Following: <span class="badge">{{ user.watchU.count() - 1 }}</span>
+    </a>
+    {% if current_user.is_authenticated and user != current_user and user.is_watching(current_user) %}
+    | <span class="label label-default">Follows you</span>
+    {% endif %}
+
+    <!-- Post -->
+    <h3>{% if user.name %}
+        {{ user.name }}
+        {% else %}
+        {{ user.username }}
+        {% endif %}的所有Posts</h3>
+    {% for post in posts %}
+        {% if post.body_html %}
+            {{ post.body_html | safe }}
+        {% else %}
+            {{ post.body }}
+        {% endif %}
+
+        <small>发表于{{ moment(post.timestamp).fromNow() }}</small>
+
+        {% if current_user == post.author %}
+            <a href="{{ url_for('.edit', id=post.id) }}">
+                <span class="label label-primary">编辑</span>
+            </a>
+        {% elif current_user.is_administrator() %}
+            <a href="{{ url_for('.edit', id=post.id) }}">
+                <span class="label label-danger">管理员编辑</span>
+            </a>
+        {% endif %}
+            <a href="{{ url_for('.post', id=post.id) }}">
+                <span class="label label-default">查看详情</span>
+            </a>
+    {% endfor %}
+
+</div>
+{% endblock %}
