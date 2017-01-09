@@ -11,7 +11,7 @@ class EditProfileForm(Form):
 	submit = SubmitField('提交')
 
 class PostForm(Form):
-	body = PageDownField("分享你当下的所思所想", validators=[Required()])
+	body = PageDownField("有什么新鲜事？", validators=[Required()])
 	submit = SubmitField('提交')
 
 class CommentForm(Form):

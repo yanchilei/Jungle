@@ -1,29 +1,21 @@
-<div class="posts container-fluid" style="width:85%; background-color:#eee; padding-bottom: 10px;margin-bottom:15px">
 	{% for post in posts %}
-	<div style="margin-bottom: 5px; margin-top: 5px; padding-bottom: 5px; padding-top: 5px">
-        <div class="raw post">
-            <div class="left-post col-md-3">
-                <div class="profile-thumbnail">
-
-                </div>
-                <div class="post-author text-center">
-			        <a href="{{ url_for('.user', username=post.author.username) }}">
-				        <span class="glyphicon glyphicon-user"></span>{{ post.author.username }}
-			        </a>
-		        </div>
+    <section class="each-post" style="border: 1px solid rgba(225,228,230,1.0)">
+        <div class="row">
+            <div class="col-md-1" style="border:1px solid black">
+                <span>
+                        <a href="{{ url_for('.user', username=post.author.username) }}"><img class="img-responsive img-rounded" style="height: 35px" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"/></a>
+                </span>
             </div>
-            <div class="right-post col-md-9" style="background-color: #ddd; margin-top:5px; padding-bottom:5px">
-                <div class="post-body">
-                    {% if post.body_html %}
-                        {{ post.body_html | safe }}
-                    {% else %}
-			            {{ post.body }}
-                    {% endif %}
-		        </div>
-                <div class="post-date col-md-6">
-			        <small>发表于{{ moment(post.timestamp).fromNow() }}</small>
-		        </div>
-                <div class="post-footer text-right col-md-6">
+
+            <div class="col-md-11">
+                <div>
+                    <a href="{{ url_for('.user', username=post.author.username) }}" style="font-size: 16px; border:1px solid black; display:inline">
+                        {{ post.author.username }}
+                    </a>
+                    <small>发表于{{ moment(post.timestamp).fromNow() }}</small>
+
+                    <div style="margin-bottom: 10px; text-align: right; border: 1px solid black; display:inline; margin-left: 200px" class="body-buttons">
+                    
                     {% if current_user == post.author %}
                         <a href="{{ url_for('.edit', id=post.id) }}">
                             <span class="label label-primary">编辑</span>
@@ -33,17 +25,28 @@
                             <span class="label label-danger">管理员修改</span>
                         </a>
                     {% endif %}
+
                         <a href="{{ url_for('.post', id=post.id) }}">
-                            <span class="label label-default">查看详情</span>
+                            <span class="label label-info">查看详情</span>
                         </a>
                         <a href="{{ url_for('.post', id=post.id) }}#comments">
-                            <span class="label label-primary">
+                            <span class="label label-success">
                                 {{ post.comments.count() }}条评论
                             </span>
                         </a>
+                    </div>
                 </div>
+
+                    <div class="body-text" style="margin: 10px auto">
+                    {% if post.body_html %}
+                        {{ post.body_html | safe }}
+                    {% else %}
+			            {{ post.body }}
+                    {% endif %}
+                    </div>
+
+                    
             </div>
         </div>
-	</div>
+    </section>
 	{% endfor %}
-</div>

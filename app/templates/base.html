@@ -6,10 +6,38 @@
 {{ super() }}
 <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
 <link rel="icon" href="../static/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" type="text/css" href="../static/post.css">
+<style>
+	body {
+		background-color: rgba(245,248,250,0.7);
+	}
+	section {
+		background-color: #fff;
+	}
+    section:hover {
+        background-color: rgba(245,248,250,0.7);
+    }
+    .navbar {
+    	background-color: #fff;
+    	border-bottom: 1px solid rgb(225,228,230);
+    	color: #000;
+    }
+    .navbar a {
+    	color: rgb(102,117,127);
+    }
+    .side-bar-welcome {
+    	border: 1px solid rgba(225,228,230,1.0);
+    	text-align:center;
+    }
+    .side-bar-welcome h5 {
+    	color: #999;
+    }
+</style>
+
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+<div class="navbar navbar" role="navigation">
 	<div class="container">	
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -40,6 +68,7 @@
 				{% else %}
 				<li><a href="{{ url_for('auth.login') }}">登录</a></li>
 				{% endif %}
+				<li><a href="{{ url_for('auth.register') }}">注册</a></li>
 			</ul>
 		</div>
 	</div>
@@ -58,7 +87,6 @@
 
 
 	{% block page_content %}{% endblock %}
-	</div>
 </div>
 {% endblock %}
 
@@ -66,12 +94,4 @@
 {{ super() }}
 {{ moment.include_moment() }}
 {{ moment.lang("zh-CN") }}
-{% endblock %}
-
-{% block styles %}
-{{ super() }}
-<style>
-body {
-background-color: #ddd;}
-</style>
 {% endblock %}

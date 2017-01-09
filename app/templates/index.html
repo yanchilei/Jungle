@@ -3,29 +3,15 @@
 {% import '_macros.html' as macros %}
 
 {% block page_content %}
-<div class="page-header">
-	<h1>你好，
-	{% if current_user.is_authenticated %}
-        {% if current_user.name %}
-            {{ current_user.name }}
-        {% else %}
-	    {{ current_user.username }}
-        {% endif %}
-	{% else %}
-	    游客
-	{% endif %}!</h1>
-</div>
-<div>
+<div class="idea">
 	{% if current_user.can(Permission.WRITE_ARTICLES) %}
 	{{ wtf.quick_form(form) }}
 	{% endif %}
 </div>
+<div class="index-divider" style="height: 10px"></div>
 
-<div class="pagination top">
-	{{ macros.pagination_widget(pagination, '.index') }}
-</div>
 
-<div class="post-tabs">
+
     {% if current_user.is_authenticated %}
     <ul class="nav nav-tabs">
         <li {% if not show_followed %} class="active" {% endif %}><a href="{{ url_for('.show_all') }}">全部内容</a></li>
@@ -34,12 +20,33 @@
         {% endif %}
     </ul>
     {% endif %}
+<div class="post-tabs page-body" style="max-width: 70%; padding-right: 15px; float: left; clear: left; margin-top: 15px">
     {% include '_posts.html' %}
+    <div class="pagination bottom">
+        {{ macros.pagination_widget(pagination, '.index') }}
+    </div>
 </div>
 
-<div class="pagination bottom">
-	{{ macros.pagination_widget(pagination, '.index') }}
+<div class="side-bar" style="max-width: 30%; background-color: #fff; margin: 15px 0 0 70%; border: 1px solid black">
+    <div class="side-bar-welcome">
+        {% if current_user.is_authenticated %}
+            <p>{% if current_user.name %}
+                {{ current_user.name }}
+            {% else %}
+                {{ current_user.username }}
+            {% endif %}</p>
+        {% else %}
+            <h5>Jungle是一个基于flask框架的轻量社交网站</h5><br>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary text-center">现在注册</a><br><br>
+            <p>已注册用户请<a href="{{ url_for('auth.login') }}">登录</a></p>
+        {% endif %}
+    </div>
+    <div>
+        hh
+    </div>
 </div>
+
+
 {% endblock %}
 
 {% block scripts %}
