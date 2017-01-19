@@ -11,6 +11,9 @@
 	body {
 		background-color: rgba(245,248,250,0.7);
 	}
+	a:hover {
+		text-decoration: none;
+	}
 	section {
 		background-color: #fff;
 	}
@@ -28,10 +31,28 @@
     .side-bar-welcome {
     	border: 1px solid rgba(225,228,230,1.0);
     	text-align:center;
+    	background-color: #efefef;
+    	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.19);
     }
     .side-bar-welcome h5 {
     	color: #999;
     }
+    .each-post {
+    	 border: 1px solid rgba(225,228,230,1.0);
+    	 padding-left: 5px; padding-top: 5px;
+    	 margin-top: 5px;
+    }
+    .side-bar-welcome img {
+    	width:100px;
+    	margin-top: 10px;
+    	margin-bottom: 10px;
+    }
+    .user-post {
+    	border: 1px solid rgba(225,228,230,1.0);
+    	padding: 10px 20px 10px 20px;
+    	margin: 5px 10px 5px 10px;
+    }
+
 </style>
 
 {% endblock %}
@@ -68,7 +89,9 @@
 				{% else %}
 				<li><a href="{{ url_for('auth.login') }}">登录</a></li>
 				{% endif %}
+				{% if not current_user.is_authenticated %}
 				<li><a href="{{ url_for('auth.register') }}">注册</a></li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>
@@ -92,6 +115,7 @@
 
 {% block scripts %}
 {{ super() }}
+<script src="//cdn.bootcss.com/vue/2.1.8/vue.min.js"></script>
 {{ moment.include_moment() }}
 {{ moment.lang("zh-CN") }}
 {% endblock %}

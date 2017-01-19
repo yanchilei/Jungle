@@ -27,22 +27,27 @@
     </div>
 </div>
 
-<div class="side-bar" style="max-width: 30%; background-color: #fff; margin: 15px 0 0 70%; border: 1px solid black">
+<div class="side-bar" style="max-width: 30%; margin: 20px 0 0 70%">
     <div class="side-bar-welcome">
         {% if current_user.is_authenticated %}
-            <p>{% if current_user.name %}
+            <img class="img-responsive img-thumbnail" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"/><br>
+            <a href="{{ url_for('.user', username=current_user.username) }}">{% if current_user.name %}
                 {{ current_user.name }}
             {% else %}
                 {{ current_user.username }}
-            {% endif %}</p>
-        {% else %}
+            {% endif %}</a>
+            {% if current_user.location %}
+                来自{{ current_user.location }}.<br> {% endif %}
+            注册于{{ moment(current_user.member_since).format('L') }}。<br>
+            上次登录是在{{ moment(current_user.last_seen).fromNow() }}。
+            {% else %}
             <h5>Jungle是一个基于flask框架的轻量社交网站</h5><br>
             <a href="{{ url_for('auth.register') }}" class="btn btn-primary text-center">现在注册</a><br><br>
             <p>已注册用户请<a href="{{ url_for('auth.login') }}">登录</a></p>
         {% endif %}
     </div>
-    <div>
-        hh
+    <div class="side-bar-summary">
+        summary
     </div>
 </div>
 

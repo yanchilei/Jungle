@@ -1,31 +1,41 @@
 	{% for post in posts %}
-    <section class="each-post" style="border: 1px solid rgba(225,228,230,1.0)">
+    <section class="each-post">
         <div class="row">
-            <div class="col-md-1" style="border:1px solid black">
+            <div class="col-md-1">
                 <span>
                         <a href="{{ url_for('.user', username=post.author.username) }}"><img class="img-responsive img-rounded" style="height: 35px" src="https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png"/></a>
                 </span>
             </div>
 
             <div class="col-md-11">
-                <div>
-                    <a href="{{ url_for('.user', username=post.author.username) }}" style="font-size: 16px; border:1px solid black; display:inline">
+                
+                    <a href="{{ url_for('.user', username=post.author.username) }}" style="font-size: 16px; display:inline">
                         {{ post.author.username }}
                     </a>
                     <small>发表于{{ moment(post.timestamp).fromNow() }}</small>
 
-                    <div style="margin-bottom: 10px; text-align: right; border: 1px solid black; display:inline; margin-left: 200px" class="body-buttons">
                     
+                    <div style="display: inline">
                     {% if current_user == post.author %}
                         <a href="{{ url_for('.edit', id=post.id) }}">
-                            <span class="label label-primary">编辑</span>
+                            <span class="glyphicon glyphicon-pencil"></span>
                         </a>
                     {% elif current_user.is_administrator() %}
                         <a href="{{ url_for('.edit', id=post.id) }}">
                             <span class="label label-danger">管理员修改</span>
                         </a>
                     {% endif %}
+                    </div>
+                        
+                    
+                
 
+                    <div class="body-text" style="margin: 10px auto">
+                    {% if post.body_html %}
+                        {{ post.body_html | safe }}
+                    {% else %}
+			            {{ post.body }}
+                    {% endif %}
                         <a href="{{ url_for('.post', id=post.id) }}">
                             <span class="label label-info">查看详情</span>
                         </a>
@@ -34,15 +44,6 @@
                                 {{ post.comments.count() }}条评论
                             </span>
                         </a>
-                    </div>
-                </div>
-
-                    <div class="body-text" style="margin: 10px auto">
-                    {% if post.body_html %}
-                        {{ post.body_html | safe }}
-                    {% else %}
-			            {{ post.body }}
-                    {% endif %}
                     </div>
 
                     
