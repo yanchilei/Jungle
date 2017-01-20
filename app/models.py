@@ -93,7 +93,7 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
-#创建虚拟数据
+    #创建虚拟数据
     @staticmethod
     def generate_fake(count=100):
         from sqlalchemy.exc import IntegrityError
@@ -109,7 +109,7 @@ class User(UserMixin, db.Model):
             except IntegrityError:
                 db.session.rollback()
 
-#关注与被关注的User方法
+    #关注与被关注的User方法
     def toWatch(self, user):
         if not self.is_watching(user):
             f = Follow(fans=self, watch=user)
@@ -130,7 +130,7 @@ class User(UserMixin, db.Model):
     def watch_posts(self):
         return Post.query.join(Follow, Follow.watch_id == Post.author_id).filter(Follow.fans_id == self.id)
 
-#将自己设置为默认关注者
+    #将自己设置为默认关注者
     @staticmethod
     def add_self_fans():
         for user in User.query.all():
@@ -181,7 +181,13 @@ class Post(db.Model):
     body_html = db.Column(db.Text)
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
 
-#创建虚拟数据
+    def __repr__(self):
+        if len(self.body) < 10:
+            return '<Post %r>' % self.body
+        else:
+            return '<Post %r>' % self.body[:11]
+
+    #创建虚拟数据
     @staticmethod
     def generate_fake(count=100):
         from random import seed, randint
@@ -195,7 +201,7 @@ class Post(db.Model):
             db.session.add(p)
             db.session.commit()
 
-#markdown处理逻辑
+    #markdown处理逻辑
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul', 'h1', 'h2', 'h3', 'p']

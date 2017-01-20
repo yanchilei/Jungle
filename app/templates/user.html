@@ -8,21 +8,21 @@
 
     <!-- Follow -->
     {% if current_user.can(Permission.FOLLOW) and user != current_user %}
-        {% if not current_user.is_following(user) %}
+        {% if not current_user.is_watching(user) %}
         <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">
-            Follow
+            关注
         </a>
         {% else %}
         <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">
-            Unfollow
+            取消关注
         </a>
         {% endif %}
     {% endif %}
     <a href="{{ url_for('.followers', username=user.username) }}">
-        Followers: <span class="badge">{{ user.fans.count() - 1 }}</span>
+        关注我的人: <span class="badge">{{ user.fans.count() - 1 }}</span>
     </a>
     <a href="{{ url_for('.followed_by', username=user.username) }}">
-        Following: <span class="badge">{{ user.watch.count() - 1 }}</span>
+        我关注的人: <span class="badge">{{ user.watch.count() - 1 }}</span>
     </a>
     {% if current_user.is_authenticated and user != current_user and user.is_watching(current_user) %}
     | <span class="label label-default">Follows you</span>
