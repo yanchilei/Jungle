@@ -7,6 +7,7 @@ class Config:
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
+	SSL_DISABLE = True
 	@staticmethod
 	def init_app(app):
 		pass
@@ -18,6 +19,7 @@ class DevelopmentConfig(Config):
 	MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 	MAIL_USE_STL = True
+	SSL_DISABLE = False
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
 class TestingConfig(Config):
@@ -26,9 +28,18 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
 	SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+	@classmethod
+	def init_app(cls, app):
+		Config.init_app(app)
 
 class HerokuConfig(ProductionConfig):
-	pass
+	#SSL_DISABLE = bool(os.environ.get('SSL_DISABLE'))
+	SSL_DISABLE = False
+	@classmethod
+	def init_app(cls, app):
+		ProductionConfig.init_app(app)
+		from werkzeug.contrib.fixers import ProxyFix
+		app.wsgi_app = ProxyFix(app.wsgi_app)
 
 
 config = {
